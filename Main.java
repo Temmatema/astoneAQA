@@ -1,19 +1,28 @@
 public class Main {
     public static void main(String[] args) {
-        Cat[] cats = {
-            new Cat("Барсик"),
-            new Cat("Мурзик"),
-            new Cat("Пушок")
-        };
+        Circle circle = new Circle(3, "blue", "red");
+        Rectangle rectangle = new Rectangle(20, 20, "orange", "black");
+        Triangle triangle = new Triangle(10, 10, 15, "pink", "white");
 
-        Bowl bowl = new Bowl(50);
+        System.out.println(
+            "Площадь круга: " + circle.area() + "\n" + 
+            "Периметр круга: " + circle.perimeter() + "\n" +
+            "Цвет заливки: " + circle.fillColor + "\n" +
+            "Цвет границ: " + circle.borderColor + "\n"
+        );
 
-        cats[0].eatFood(bowl, 15);
-        cats[1].eatFood(bowl, 20);
-        cats[2].eatFood(bowl, 40);
+        System.out.println(
+            "Площадь прямоугольника: " + rectangle.area() + "\n" + 
+            "Периметр прямоугольника: " + rectangle.perimeter() + "\n" +
+            "Цвет заливки: " + rectangle.fillColor + "\n" +
+            "Цвет границ: " + rectangle.borderColor + "\n"
+        );
 
-        for (Cat c : cats) {
-            System.out.println(c.name + (c.isHungry() ? " покушал." : " голоден."));
-        }
+        System.out.println(
+            "Площадь треугольника: " + triangle.area() + "\n" + 
+            "Периметр треугольника: " + triangle.perimeter() + "\n" +
+            "Цвет заливки: " + triangle.fillColor + "\n" +
+            "Цвет границ: " + triangle.borderColor + "\n"
+        );
     }
 }
