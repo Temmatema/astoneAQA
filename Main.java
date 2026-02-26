@@ -1,28 +1,72 @@
+class MyArraySizeException extends Exception {
+    MyArraySizeException(String message) {
+        super(message);
+    }
+}
+
+class MyArrayDataException extends Exception {
+    MyArrayDataException(String message) {
+        super(message);
+    }
+}
+
 public class Main {
+    public static boolean checkArray(String[][] array) {
+        if (array == null || array.length != 4) {
+            return false;
+        }
+
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == null || array[i].length != 4) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static int myFunc(String[][] array) throws MyArrayDataException, MyArraySizeException {
+        if (!checkArray(array)) {
+            throw new MyArraySizeException("Массив должен быть 4х4");
+        }
+
+        int sum = 0;
+        for(int i = 0; i < array.length; i++) {
+            for(int j = 0; j < array[i].length; j++) {
+                try {
+                    sum += Integer.parseInt(array[i][j]);
+                } catch (NumberFormatException e) {
+                    throw new MyArrayDataException(
+                        "Массив содержит некорректные данные\n" + 
+                        "Строка " + (i + 1) + "\n" +
+                        "Столбец " + (j + 1)
+                    );
+                }
+            }
+        }
+
+        return sum;
+    }
+
     public static void main(String[] args) {
-        Circle circle = new Circle(3, "blue", "red");
-        Rectangle rectangle = new Rectangle(20, 20, "orange", "black");
-        Triangle triangle = new Triangle(10, 10, 15, "pink", "white");
+        String[][] array = {
+            {"1", "2", "3", "4"},
+            {"1", "2", "3", "4"},
+            {"1", "2", "3", "4"},
+            {"1", "2", "3", "4"},
+        };
+        
+        try {
+            int result = myFunc(array);
+            System.out.print("Результат сложения: " + result);
+        } catch (MyArrayDataException | MyArraySizeException e) {
+            System.out.println(e.getMessage());
+        }
 
-        System.out.println(
-            "Площадь круга: " + circle.area() + "\n" + 
-            "Периметр круга: " + circle.perimeter() + "\n" +
-            "Цвет заливки: " + circle.fillColor + "\n" +
-            "Цвет границ: " + circle.borderColor + "\n"
-        );
-
-        System.out.println(
-            "Площадь прямоугольника: " + rectangle.area() + "\n" + 
-            "Периметр прямоугольника: " + rectangle.perimeter() + "\n" +
-            "Цвет заливки: " + rectangle.fillColor + "\n" +
-            "Цвет границ: " + rectangle.borderColor + "\n"
-        );
-
-        System.out.println(
-            "Площадь треугольника: " + triangle.area() + "\n" + 
-            "Периметр треугольника: " + triangle.perimeter() + "\n" +
-            "Цвет заливки: " + triangle.fillColor + "\n" +
-            "Цвет границ: " + triangle.borderColor + "\n"
-        );
+        try {
+            String value = array[7][0];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Поймали: " + e.getMessage());
+        }
     }
 }
