@@ -1,48 +1,3 @@
-class Product {
-    String name;
-    String productionDate;
-    String manufacturer;
-    String countryOfOrigin;
-    int price;
-    boolean reservationStatus;
-
-    Product(String name, String productionDate, String manufacturer, String countryOfOrigin, int price, boolean reservationStatus) {
-        this.name = name;
-        this.countryOfOrigin = countryOfOrigin;
-        this.manufacturer = manufacturer;
-        this.productionDate = productionDate;
-        this.price = price;
-        this.reservationStatus = reservationStatus;
-    }
-
-    public void consoleInfo() {
-        System.out.println("Название: " + name);
-        System.out.println("Дата производства: " + productionDate);
-        System.out.println("Производитель: " + manufacturer);
-        System.out.println("Страна: " + countryOfOrigin);
-        System.out.println("Цена: " + price);
-        System.out.println("Забронирован: " + reservationStatus);
-    }
-}
-
-class Park {
-    class Attraction {
-        String name;
-        String workingTime;
-        int price;
-
-        Attraction(String name, String workingTime, int price) {
-            this.name = name;
-            this.workingTime = workingTime;
-            this.price = price;
-        }
-
-        void info() {
-            System.out.println(name + " " + workingTime + " " + price);
-        }
-    }
-}
-
 public class Main {
     public static void main(String[] args) {
         Product[] productsArray = new Product[5];
@@ -93,6 +48,7 @@ public class Main {
         );
 
         Park.Attraction attraction = new Park().new Attraction("Горки", "10-20", 2000);
+        System.out.println(productsArray[0].toString());
         attraction.info();
     }
 }
