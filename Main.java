@@ -1,15 +1,3 @@
-class MyArraySizeException extends Exception {
-    MyArraySizeException(String message) {
-        super(message);
-    }
-}
-
-class MyArrayDataException extends Exception {
-    MyArrayDataException(String message) {
-        super(message);
-    }
-}
-
 public class Main {
     public static boolean checkArray(String[][] array) {
         if (array == null || array.length != 4) {
