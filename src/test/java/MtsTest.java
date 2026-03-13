@@ -1,3 +1,4 @@
+import java.time.Duration;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterAll;
@@ -8,6 +9,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
@@ -66,6 +69,30 @@ public class MtsTest {
 
     @Test
     void test4() {
+        driver.get("https://mts.by");
+        WebElement phoneField = driver.findElement(By.id("connection-phone"));
+        WebElement sumField = driver.findElement(By.id("connection-sum"));
+        WebElement emailField = driver.findElement(By.id("connection-email"));
+        WebElement continueBnt = driver.findElement(By.xpath("//form[@id='pay-connection']/button"));
+
+        String phoneNumber = "297777777";
+        String sum = "100";
+        String email = "test@test.ru";
         
+        phoneField.sendKeys(phoneNumber);
+        sumField.sendKeys(sum);
+        emailField.sendKeys(email);
+
+        continueBnt.click();
+
+        //iframe появляется не мгновенно, делаем паузу 5 сек
+        new WebDriverWait(driver, 
+            Duration.ofSeconds(5))
+            .until(ExpectedConditions.visibilityOfElementLocated(
+                By.className("payment-widget-iframe")
+            ));
+
+        WebElement iframe = driver.findElement(By.className("payment-widget-iframe"));
+        Assertions.assertEquals("visible", iframe.getCssValue("visibility"));
     }
 }
