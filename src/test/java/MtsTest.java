@@ -1,98 +1,90 @@
-import java.time.Duration;
 import java.util.List;
-
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.By;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class MtsTest {
-    static WebDriver driver;
-    
-    @BeforeAll
-    static void setup() {
+
+    private WebDriver driver;
+    private MainPage mainPage;
+    private PaymentPage paymentPage;
+
+    @BeforeEach
+    public void setup() {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
         driver.get("https://mts.by");
 
-        //принимаем куки
-        WebElement cookieBtn = driver.findElement(By.id("cookie-agree"));
-        cookieBtn.click();   
+        mainPage = new MainPage(driver);
+        paymentPage = new PaymentPage(driver);
+
+        mainPage.acceptCookie();
     }
 
-    @AfterAll
-    static void quit() {
+    @AfterEach
+    public void quit() {
         driver.quit();
     }
 
     @Test
-    void test1() {
-        WebElement heading = driver.findElement(By.xpath("//h2[contains(normalize-space(), 'Онлайн пополнение без комиссии')]"));
-    
-        String actualText = heading.getText().replace("\n", " ");
-        String expectedText = "Онлайн пополнение без комиссии";
+    public void titleCheck() {
+        String actual   = mainPage.getBlockTitle();
+        String expected = "Онлайн пополнение без комиссии";
 
-        Assertions.assertEquals(expectedText, actualText);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
-    void test2() {
-        List<WebElement> imgs = driver.findElements(By.xpath("//div[@class='pay__partners']//img"));
-        
-        Assertions.assertEquals(5, imgs.size());
+    public void logosCheck() {
+        List<WebElement> logos = mainPage.getPaymentLogos();
 
-        //проверяем, что заполнен src, а не просто пустые теги img
-        for(WebElement img : imgs) {
-            String src = img.getAttribute("src");
-            Assertions.assertFalse(src.isEmpty());
-        }
+        Assertions.assertEquals(5, logos.size());
+
+        logos.forEach(logo -> Assertions.assertFalse(logo.getAttribute("src").isEmpty()));
     }
 
     @Test
-    void test3() {
-        WebElement link = driver.findElement(By.xpath("//a[text()='Подробнее о сервисе']"));
+    public void learnMoreServiceLinkCheck() {
+        WebElement link = mainPage.getLearnMoreServiceLink();
+        String urlBefore = driver.getCurrentUrl();
 
         Assertions.assertFalse(link.getAttribute("href").isEmpty());
-
-        String url = driver.getCurrentUrl();
         link.click();
-        Assertions.assertNotEquals(url, driver.getCurrentUrl());
+        Assertions.assertNotEquals(urlBefore, driver.getCurrentUrl());
+        driver.navigate().back();
     }
 
     @Test
-    void test4() {
-        driver.get("https://mts.by");
-        WebElement phoneField = driver.findElement(By.id("connection-phone"));
-        WebElement sumField = driver.findElement(By.id("connection-sum"));
-        WebElement emailField = driver.findElement(By.id("connection-email"));
-        WebElement continueBnt = driver.findElement(By.xpath("//form[@id='pay-connection']/button"));
+    public void onlineTopUpCheck() {
+        mainPage
+            .fillPhone(Config.PHONE)
+            .fillEmail(Config.EMAIL)
+            .fillSum(Config.SUM)
+            .clickContinue();
 
-        String phoneNumber = "297777777";
-        String sum = "100";
-        String email = "test@test.ru";
-        
-        phoneField.sendKeys(phoneNumber);
-        sumField.sendKeys(sum);
-        emailField.sendKeys(email);
-
-        continueBnt.click();
-
-        //iframe появляется не мгновенно, делаем паузу 5 сек
-        new WebDriverWait(driver, 
-            Duration.ofSeconds(5))
-            .until(ExpectedConditions.visibilityOfElementLocated(
-                By.className("payment-widget-iframe")
-            ));
-
-        WebElement iframe = driver.findElement(By.className("payment-widget-iframe"));
+        WebElement iframe = paymentPage.getIframe();
         Assertions.assertEquals("visible", iframe.getCssValue("visibility"));
+
+        paymentPage.switchToIframe();
+
+        Assertions.assertEquals(Config.SUM + ".00 BYN", paymentPage.getSumTitle());
+        Assertions.assertEquals("Оплатить " + Config.SUM + ".00 BYN", paymentPage.getSumButton());
+        Assertions.assertEquals(Config.PHONE, paymentPage.getPhoneText());
+
+        List<WebElement> icons = paymentPage.getCardIcons();
+        Assertions.assertFalse(icons.isEmpty());
+
+        for (WebElement icon : icons) {
+            Assertions.assertFalse(icon.getAttribute("src").isEmpty());
+        }
+
+        List.of(
+                paymentPage.getCardCVCLabel(),
+                paymentPage.getCardDateLabel(),
+                paymentPage.getCardNameLabel(),
+                paymentPage.getCardNumberLabel()
+        ).forEach(label -> Assertions.assertFalse(label.isEmpty()));
     }
 }
