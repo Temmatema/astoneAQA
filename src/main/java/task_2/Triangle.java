@@ -1,16 +1,26 @@
-public class Triangle implements Shape {
-    int sideA;
-    int sideB;
-    int sideC;
-    String fillColor;
-    String borderColor;
+package task_2;
 
-    Triangle(int sideA, int sideB, int sideC, String fillColor, String borderColor) {
+public class Triangle implements Shape {
+    private final int sideA;
+    private final int sideB;
+    private final int sideC;
+    private final String fillColor;
+    private final String borderColor;
+
+    public Triangle(int sideA, int sideB, int sideC, String fillColor, String borderColor) {
         this.sideA = sideA;
         this.sideB = sideB;
         this.sideC = sideC;
         this.borderColor = borderColor;
         this.fillColor = fillColor;
+    }
+
+    public String getFillColor() {
+        return fillColor;
+    }
+
+    public String getBorderColor() {
+        return borderColor;
     }
     
     public double area() {

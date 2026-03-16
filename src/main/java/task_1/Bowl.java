@@ -1,7 +1,9 @@
+package task_1;
+
 public class Bowl {
     private int food;
 
-    Bowl(int food) {
+    public Bowl(int food) {
         this.food = food;
     }
 

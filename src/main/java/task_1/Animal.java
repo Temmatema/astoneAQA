@@ -1,10 +1,16 @@
+package task_1;
+
 public abstract class Animal {
-    String name;
+    private final String name;
     public static int count;
 
-    Animal(String name) {
+    public Animal(String name) {
         this.name = name;
         count++;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public abstract String run(int distance);

@@ -1,10 +1,12 @@
+package task_1;
+
 public class Cat extends Animal {
     public static int countCat;
     private boolean isHungry;
 
-    Cat(String name) {
+    public Cat(String name) {
         super(name);
-        this.isHungry = false;
+        this.isHungry = true;
         countCat++;
     }
 
@@ -24,14 +26,14 @@ public class Cat extends Animal {
     }
 
     public String swim(int distance) {
-        return name + " не умеет плавать :(";
+        return getName() + " не умеет плавать :(";
     }
 
     public String run(int distance) {
         if (distance <= 200) {
-            return name + " пробежал: " + distance + " м\n";
+            return getName() + " пробежал: " + distance + " м\n";
         }
 
-        return name + " не может пробежать: " + distance + " м\n";
+        return getName() + " не может пробежать: " + distance + " м\n";
     }
 }

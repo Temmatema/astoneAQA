@@ -1,3 +1,5 @@
+package task_1;
+
 public class Main {
     public static void main(String[] args) {
         Cat[] cats = {
@@ -13,7 +15,7 @@ public class Main {
         cats[2].eatFood(bowl, 40);
 
         for (Cat c : cats) {
-            System.out.println(c.name + (c.isHungry() ? " покушал." : " голоден."));
+            System.out.println(c.getName() + (c.isHungry() ? " покушал." : " голоден."));
         }
     }
 }
