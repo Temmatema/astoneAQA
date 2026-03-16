@@ -62,19 +62,22 @@ public class MainPage extends BasePage {
         return getAttribute(locator, "placeholder");
     }
 
-    public void selectTab() {
-        click(selectButtonLocator);
-    }
-
-    public void selectInternetTab() {
+    public void openInternetTab() {
+        selectTab();
         click(internetTabLocator);
     }
 
-    public void selectInstalmentTab() {
+    public void openArrearsTab() {
+        selectTab();
+        click(arrearsTabLocator);
+    }
+
+    public void openInstalmentTab() {
+        selectTab();
         click(instalmentTabLocator);
     }
 
-    public void selectArrearsTab() {
-        click(arrearsTabLocator);
+    public void selectTab() {
+        click(selectButtonLocator);
     }
 }

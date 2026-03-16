@@ -96,7 +96,6 @@ public class MtsTest {
         ).forEach(label -> Assertions.assertFalse(label.isEmpty()));
     }
 
-    // в этом тесте без enum очень громоздко все получалось
     @Test
     @DisplayName("Проверяем плейсхолдеры")
     public void placeholderCheck() {
@@ -104,20 +103,17 @@ public class MtsTest {
                 PlaceholderField.CONNECTION_SUM,
                 PlaceholderField.CONNECTION_EMAIL);
 
-        mainPage.selectTab();
-        mainPage.selectInternetTab();
+        mainPage.openInternetTab();
         checkPlaceholders(PlaceholderField.INTERNET_PHONE,
                 PlaceholderField.INTERNET_SUM,
                 PlaceholderField.INTERNET_EMAIL);
 
-        mainPage.selectTab();
-        mainPage.selectInstalmentTab();
+        mainPage.openInstalmentTab();
         checkPlaceholders(PlaceholderField.INSTALMENT_SCORE,
                 PlaceholderField.INSTALMENT_SUM,
                 PlaceholderField.INSTALMENT_EMAIL);
 
-        mainPage.selectTab();
-        mainPage.selectArrearsTab();
+        mainPage.openArrearsTab();
         checkPlaceholders(PlaceholderField.ARREARS_SCORE,
                 PlaceholderField.ARREARS_SUM,
                 PlaceholderField.ARREARS_EMAIL);
