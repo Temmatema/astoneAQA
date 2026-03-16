@@ -28,36 +28,36 @@ public class PaymentPage extends BasePage {
     }
 
     public String getSumTitle() {
-        return waitForElement(sumTitleLocator).getText();
+        return getText(sumTitleLocator);
     }
 
     public String getSumButton() {
-        return getDriver().findElement(sumButtonLocator).getText();
+        return getText(sumButtonLocator);
     }
 
     public String getPhoneText() {
-        String text = getDriver().findElement(phoneTextLocator).getText();
-        int index = text.indexOf("375") + 3;
-        return text.substring(index);
+        String text = getText(phoneTextLocator);
+        return text.replaceAll(".*375", "");
     }
 
     public String getCardNumberLabel() {
-        return getDriver().findElement(cardNumberLabel).getText();
+        return getText(cardNumberLabel);
     }
 
     public String getCardDateLabel() {
-        return getDriver().findElement(cardDateLabel).getText();
+        return getText(cardDateLabel);
     }
 
     public String getCardCVCLabel() {
-        return getDriver().findElement(cardCVCLabel).getText();
+        return getText(cardCVCLabel);
     }
 
     public String getCardNameLabel() {
-        return getDriver().findElement(cardNameLabel).getText();
+        return getText(cardNameLabel);
     }
 
     public List<WebElement> getCardIcons() {
+        waitForElement(cardIconsLocator);
         return getDriver().findElements(cardIconsLocator);
     }
 }

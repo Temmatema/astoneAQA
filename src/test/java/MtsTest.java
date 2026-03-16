@@ -15,7 +15,7 @@ public class MtsTest {
     public void setup() {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
-        driver.get("https://mts.by");
+        driver.get(Config.URL);
 
         mainPage = new MainPage(driver);
         paymentPage = new PaymentPage(driver);
@@ -29,6 +29,7 @@ public class MtsTest {
     }
 
     @Test
+    @DisplayName("Проверка заголовка")
     public void titleCheck() {
         String actual = mainPage.getBlockTitle();
         String expected = "Онлайн пополнение без комиссии";
@@ -37,6 +38,7 @@ public class MtsTest {
     }
 
     @Test
+    @DisplayName("Проверка логотипов платёжных систем")
     public void logosCheck() {
         List<WebElement> logos = mainPage.getPaymentLogos();
         Assertions.assertEquals(5, logos.size());
@@ -44,6 +46,7 @@ public class MtsTest {
     }
 
     @Test
+    @DisplayName("Проверка кнопки [Подробнее о сервисе]")
     public void learnMoreServiceLinkCheck() {
         WebElement link = mainPage.getLearnMoreServiceLink();
         String urlBefore = driver.getCurrentUrl();
@@ -55,34 +58,74 @@ public class MtsTest {
     }
 
     @Test
+    @DisplayName("Проверка кнопки [Продолжить] + Проверка модального окна")
     public void onlineTopUpCheck() {
-        mainPage
-            .fillPhone(Config.PHONE)
-            .fillEmail(Config.EMAIL)
-            .fillSum(Config.SUM)
-            .clickContinue();
+        mainPage.fillPhone(Config.PHONE)
+                .fillEmail(Config.EMAIL)
+                .fillSum(Config.SUM)
+                .clickContinue();
 
-        WebElement iframe = paymentPage.getIframe();
-        Assertions.assertEquals("visible", iframe.getCssValue("visibility"));
+        Assertions.assertEquals("visible", paymentPage.getIframe().getCssValue("visibility"));
 
         paymentPage.switchToIframe();
 
-        Assertions.assertEquals(Config.SUM + ".00 BYN", paymentPage.getSumTitle());
-        Assertions.assertEquals("Оплатить " + Config.SUM + ".00 BYN", paymentPage.getSumButton());
-        Assertions.assertEquals(Config.PHONE, paymentPage.getPhoneText());
+        assertPaymentSummary();
+        assertCardIcons();
+        assertCardLabels();
+    }
 
+    private void assertPaymentSummary() {
+        String expectedSum = Config.SUM + ".00 BYN";
+        Assertions.assertEquals(expectedSum, paymentPage.getSumTitle());
+        Assertions.assertEquals("Оплатить " + expectedSum, paymentPage.getSumButton());
+        Assertions.assertEquals(Config.PHONE, paymentPage.getPhoneText());
+    }
+
+    private void assertCardIcons() {
         List<WebElement> icons = paymentPage.getCardIcons();
         Assertions.assertFalse(icons.isEmpty());
+        icons.forEach(icon -> Assertions.assertFalse(icon.getAttribute("src").isEmpty()));
+    }
 
-        for (WebElement icon : icons) {
-            Assertions.assertFalse(icon.getAttribute("src").isEmpty());
-        }
-
+    private void assertCardLabels() {
         List.of(
                 paymentPage.getCardCVCLabel(),
                 paymentPage.getCardDateLabel(),
                 paymentPage.getCardNameLabel(),
                 paymentPage.getCardNumberLabel()
         ).forEach(label -> Assertions.assertFalse(label.isEmpty()));
+    }
+
+    // в этом тесте без enum очень громоздко все получалось
+    @Test
+    @DisplayName("Проверяем плейсхолдеры")
+    public void placeholderCheck() {
+        checkPlaceholders(PlaceholderField.CONNECTION_PHONE,
+                PlaceholderField.CONNECTION_SUM,
+                PlaceholderField.CONNECTION_EMAIL);
+
+        mainPage.selectTab();
+        mainPage.selectInternetTab();
+        checkPlaceholders(PlaceholderField.INTERNET_PHONE,
+                PlaceholderField.INTERNET_SUM,
+                PlaceholderField.INTERNET_EMAIL);
+
+        mainPage.selectTab();
+        mainPage.selectInstalmentTab();
+        checkPlaceholders(PlaceholderField.INSTALMENT_SCORE,
+                PlaceholderField.INSTALMENT_SUM,
+                PlaceholderField.INSTALMENT_EMAIL);
+
+        mainPage.selectTab();
+        mainPage.selectArrearsTab();
+        checkPlaceholders(PlaceholderField.ARREARS_SCORE,
+                PlaceholderField.ARREARS_SUM,
+                PlaceholderField.ARREARS_EMAIL);
+    }
+
+    private void checkPlaceholders(PlaceholderField... fields) {
+        for (PlaceholderField field : fields) {
+            Assertions.assertEquals(field.placeholder, mainPage.getPlaceholder(field.locator));
+        }
     }
 }
