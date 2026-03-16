@@ -2,8 +2,14 @@ package task_2;
 
 public interface Shape {
     double area();
+    double perimeter();
+    String getFillColor();
+    String getBorderColor();
 
-    default double perimeter() {
-        return 0;
+    default void printInfo() {
+        System.out.println("Площадь: " + area());
+        System.out.println("Периметр: " + perimeter());
+        System.out.println("Цвет заливки: " + getFillColor());
+        System.out.println("Цвет границ: " + getBorderColor());
     }
 }

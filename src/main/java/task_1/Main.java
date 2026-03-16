@@ -15,7 +15,7 @@ public class Main {
         cats[2].eatFood(bowl, 40);
 
         for (Cat c : cats) {
-            System.out.println(c.getName() + (c.isHungry() ? " покушал." : " голоден."));
+            System.out.println(c.getName() + (c.isHungry() ? " голоден." : " покушал."));
         }
     }
 }

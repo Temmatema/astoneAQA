@@ -18,9 +18,9 @@ public class Cat extends Animal {
         int food = bowl.getFood();
 
         if (food < amount) {
-            this.isHungry = false;
-        } else {
             this.isHungry = true;
+        } else {
+            this.isHungry = false;
             bowl.decreaseFood(amount);
         }
     }
