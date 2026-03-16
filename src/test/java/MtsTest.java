@@ -30,7 +30,7 @@ public class MtsTest {
 
     @Test
     public void titleCheck() {
-        String actual   = mainPage.getBlockTitle();
+        String actual = mainPage.getBlockTitle();
         String expected = "Онлайн пополнение без комиссии";
 
         Assertions.assertEquals(expected, actual);
@@ -39,9 +39,7 @@ public class MtsTest {
     @Test
     public void logosCheck() {
         List<WebElement> logos = mainPage.getPaymentLogos();
-
         Assertions.assertEquals(5, logos.size());
-
         logos.forEach(logo -> Assertions.assertFalse(logo.getAttribute("src").isEmpty()));
     }
 
