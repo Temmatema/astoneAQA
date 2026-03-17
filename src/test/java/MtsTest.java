@@ -1,10 +1,13 @@
 import java.util.List;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
+@Epic("MTS Сайт")
+@Feature("Онлайн оплата")
 public class MtsTest {
 
     private WebDriver driver;
@@ -30,6 +33,9 @@ public class MtsTest {
 
     @Test
     @DisplayName("Проверка заголовка")
+    @Description("Проверяем, что заголовок блока соответствует ожидаемому")
+    @Story("Заголовок блока")
+    @Severity(SeverityLevel.NORMAL)
     public void titleCheck() {
         String actual = mainPage.getBlockTitle();
         String expected = "Онлайн пополнение без комиссии";
@@ -39,6 +45,9 @@ public class MtsTest {
 
     @Test
     @DisplayName("Проверка логотипов платёжных систем")
+    @Description("Проверяем наличие 5 логотипов платёжных систем и их src")
+    @Story("Логотипы")
+    @Severity(SeverityLevel.MINOR)
     public void logosCheck() {
         List<WebElement> logos = mainPage.getPaymentLogos();
         Assertions.assertEquals(5, logos.size());
@@ -47,6 +56,9 @@ public class MtsTest {
 
     @Test
     @DisplayName("Проверка кнопки [Подробнее о сервисе]")
+    @Description("Проверяем, что ссылка ведёт на другую страницу")
+    @Story("Навигация")
+    @Severity(SeverityLevel.NORMAL)
     public void learnMoreServiceLinkCheck() {
         WebElement link = mainPage.getLearnMoreServiceLink();
         String urlBefore = driver.getCurrentUrl();
@@ -59,6 +71,9 @@ public class MtsTest {
 
     @Test
     @DisplayName("Проверка кнопки [Продолжить] + Проверка модального окна")
+    @Description("Заполняем форму, нажимаем продолжить, проверяем iframe и данные оплаты")
+    @Story("Онлайн оплата")
+    @Severity(SeverityLevel.CRITICAL)
     public void onlineTopUpCheck() {
         mainPage.fillPhone(Config.PHONE)
                 .fillEmail(Config.EMAIL)
@@ -74,6 +89,7 @@ public class MtsTest {
         assertCardLabels();
     }
 
+    @Step("Проверка суммы и телефона в модальном окне")
     private void assertPaymentSummary() {
         String expectedSum = Config.SUM + ".00 BYN";
         Assertions.assertEquals(expectedSum, paymentPage.getSumTitle());
@@ -81,12 +97,14 @@ public class MtsTest {
         Assertions.assertEquals(Config.PHONE, paymentPage.getPhoneText());
     }
 
+    @Step("Проверка иконок")
     private void assertCardIcons() {
         List<WebElement> icons = paymentPage.getCardIcons();
         Assertions.assertFalse(icons.isEmpty());
         icons.forEach(icon -> Assertions.assertFalse(icon.getAttribute("src").isEmpty()));
     }
 
+    @Step("Проверка лейблов полей карты")
     private void assertCardLabels() {
         List.of(
                 paymentPage.getCardCVCLabel(),
@@ -98,6 +116,9 @@ public class MtsTest {
 
     @Test
     @DisplayName("Проверяем плейсхолдеры")
+    @Description("Проверяем плейсхолдеры во всех вкладках формы")
+    @Story("Плейсхолдеры")
+    @Severity(SeverityLevel.NORMAL)
     public void placeholderCheck() {
         checkPlaceholders(PlaceholderField.CONNECTION_PHONE,
                 PlaceholderField.CONNECTION_SUM,
@@ -119,6 +140,7 @@ public class MtsTest {
                 PlaceholderField.ARREARS_EMAIL);
     }
 
+    @Step("Проверка плейсхолдеров группы полей")
     private void checkPlaceholders(PlaceholderField... fields) {
         for (PlaceholderField field : fields) {
             Assertions.assertEquals(field.placeholder, mainPage.getPlaceholder(field.locator));
