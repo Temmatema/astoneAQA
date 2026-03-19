@@ -1,26 +1,30 @@
+package task_1;
+
+import java.util.Arrays;
+
 public class Student {
-    private String name;
-    private String group;
+    private final String name;
+    private final String group;
     private int course;
-    private int[] grades;
+    private final int[] grades;
 
     Student(String name, String group, int course, int[] grades) {
         this.name = name;
         this.group = group;
         this.course = course;
-        this.grades = grades;
+        this.grades = Arrays.copyOf(grades, grades.length);
     }
 
     public String getGroup() {
-        return this.group;
+        return group;
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public int getCourse() {
-        return this.course;
+        return course;
     }
 
     public void setCourse(int course) {
@@ -28,12 +32,6 @@ public class Student {
     }
 
     public double getAverageGrade() {
-        double sum = 0;
-        
-        for(int grade : grades) {
-            sum += grade;
-        }
-
-        return sum / grades.length;
+        return Arrays.stream(grades).average().orElse(0);
     }
 }
