@@ -2,12 +2,12 @@ package task_2;
 
 public class Main {
     public static void main(String[] args) {
-        Circle circle = new Circle(3, "blue", "red");
-        Rectangle rectangle = new Rectangle(20, 20, "orange", "black");
-        Triangle triangle = new Triangle(10, 10, 15, "pink", "white");
+        PhoneBook phoneBook = new PhoneBook();
+        phoneBook.add("Петров", "89001112233");
+        phoneBook.add("Петров", "89004445566");
+        phoneBook.add("Иванов", "89003334455");
+        phoneBook.add("Соколов", "89003334455");
 
-        circle.printInfo();
-        rectangle.printInfo();
-        triangle.printInfo();
+        System.out.println(phoneBook.get("Петров"));
     }
 }

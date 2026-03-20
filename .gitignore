@@ -1,5 +1,2 @@
 *.class
 /target
-pom.xml
-/.idea
-/.vscode
