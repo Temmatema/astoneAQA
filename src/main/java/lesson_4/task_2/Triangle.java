@@ -1,4 +1,4 @@
-package task_2;
+package lesson_4.task_2;
 
 public class Triangle implements Shape {
     private final int sideA;

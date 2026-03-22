@@ -1,14 +1,12 @@
-package task_2;
+package lesson_4.task_2;
 
-public class Rectangle implements Shape {
-    private final int height;
-    private final int width;
+public class Circle implements Shape {
+    private final int radius;
     private final String fillColor;
     private final String borderColor;
 
-    public Rectangle(int width, int height, String fillColor, String borderColor) {
-        this.height = height;
-        this.width = width;
+    public Circle(int radius, String fillColor, String borderColor) {
+        this.radius = radius;
         this.borderColor = borderColor;
         this.fillColor = fillColor;
     }
@@ -22,11 +20,11 @@ public class Rectangle implements Shape {
     }
     
     public double area() {
-        return width * height;
+        return radius * radius * Math.PI;
     }
 
     @Override
     public double perimeter() {
-        return 2 * height + 2 * width;
+        return 2 * Math.PI * radius;
     }
 }
